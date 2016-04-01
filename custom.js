@@ -2,8 +2,8 @@ locations = null;
 
 $(function() {
   
-	var storelist = JSON.parse(storelistjson);
-	locations = storelist.location;
+	var storeList = JSON.parse(storeListjson);
+	locations = storeList.location;
 
   	initMap();
 
@@ -12,60 +12,52 @@ $(function() {
 
 function initMap() {
 
-        var map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 37.3382, lng: -121.8863},
-          zoom: 9
-        });
+  var map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 37.3382, lng: -121.8863},
+    zoom: 9
+  });
 
-    for (var key in locations)
-	{
-	   if (locations.hasOwnProperty(key))
-	   {
+  for (var key in locations) {
+   if (locations.hasOwnProperty(key)) {
+      var lat = locations[key].latitude;
+      var lng = locations[key].longitude;
+      var addr = locations[key].address;
+      var type = locations[key].type;
+      var rev = locations[key].$revenue;
 
-	      var lat = locations[key].latitude;
-	      var lng = locations[key].longitude;
-	      var addr = locations[key].address;
-	      var type = locations[key].type;
-        var rev = locations[key].$revenue;
+      var image = new google.maps.MarkerImage(
+          "images/red-pin.png",
+          null,
+          null,
+          null, 
+          new google.maps.Size(20, 32)
+      ); 
 
-        /// default red pin
-        var image = new google.maps.MarkerImage(
-            "images/red-pin.png",
-            null,
-            null,
-            null, 
-            new google.maps.Size(20, 32)
+      if(type == "Distribution Facility") {
+        image = new google.maps.MarkerImage(
+          "images/red.png",
+          null,
+          null,
+          null, 
+          new google.maps.Size(20, 32)
         ); 
-
-
-        if(type == "Distribution Facility") {
-          image = new google.maps.MarkerImage(
-            "images/red.png",
-            null,
-            null,
-            null, 
-            new google.maps.Size(20, 32)
-          ); 
-        }
-        if(type == "RetailLocation") {
-          image = new google.maps.MarkerImage(
-            "images/green.png",
-            null,
-            null,
-            null, 
-            new google.maps.Size(20, 32)
+      } else if(type == "RetailLocation") {
+        image = new google.maps.MarkerImage(
+          "images/green.png",
+          null,
+          null,
+          null, 
+          new google.maps.Size(20, 32)
         ); 
-        }
-        if(type == "Call Center") {
-          image = new google.maps.MarkerImage(
-            "images/blue.png",
-            null,
-            null,
-            null, 
-            new google.maps.Size(20, 32)
+      } else if(type == "Call Center") {
+        image = new google.maps.MarkerImage(
+          "images/blue.png",
+          null,
+          null,
+          null, 
+          new google.maps.Size(20, 32)
         ); 
-        }
-        if(type == "HeadQuarters") {
+      } else if(type == "HeadQuarters") {
           image = new google.maps.MarkerImage(
             "images/white.png",
             null,
@@ -73,31 +65,30 @@ function initMap() {
             null, 
             new google.maps.Size(20, 32)
         ); 
-        }
-	      
-	      var marker = new google.maps.Marker({
-                                          map: map,
-                                          position: {lat: lat, lng: lng},
-                                          title: addr,
-                                          icon: image
-                                          });
-
-        var revCircle = new google.maps.Circle({
-          strokeColor: '#969696',
-          strokeOpacity: 0.8,
-          strokeWeight: 2,
-          fillColor: '#969696',
-          fillOpacity: 0.35,
-          map: map,
-          center: {lat: lat, lng: lng},
-          radius: Math.sqrt(rev) * 2
+      }
+      
+      var marker = new google.maps.Marker({
+        map: map,
+        position: {lat: lat, lng: lng},
+        title: addr,
+        icon: image
         });
-	   }
-	}
+
+      var revCircle = new google.maps.Circle({
+        strokeColor: '#969696',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#969696',
+        fillOpacity: 0.35,
+        map: map,
+        center: {lat: lat, lng: lng},
+        radius: Math.sqrt(rev) * 2
+      });
+    }
+  }
 }
-   
-    
-var storelistjson = '{'+
+ 
+var storeListjson = '{'+
     '"location": ['+
         '{'+
             '"id": "0001",'+
@@ -220,5 +211,5 @@ var storelistjson = '{'+
         '"$revenue": 50000'+
       '}'+       
     ']'+
-'}';                             
+'}';                        
                               
